@@ -13,7 +13,7 @@ docker-compose up -d
 
 ## Spring Boot Kafka Clients 
 
-### Spring Boot Kafka Protobuf Producer
+### Spring Boot Kafka Protobuf Producer
 
 ./spring-kafka-pb-producer
 
@@ -26,7 +26,7 @@ docker-compose up -d
 * Person data generator
 
  
-### Spring Boot Kafka Protobuf Consumer
+### Spring Boot Kafka Protobuf Consumer
 
 ./spring-kafka-pb-consumer 
 
