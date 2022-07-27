@@ -14,6 +14,6 @@ public class KafkaClientConsumer {
 
     @KafkaListener(topics = "${persons.topic}", groupId = "${spring.kafka.consumer.group-id}")
     public void listenGroupFoo(DynamicMessage message) {
-        logger.info("Received Message in group foo: " + message);
+        logger.info("Received Message: {} ",  message);
     }
 }
