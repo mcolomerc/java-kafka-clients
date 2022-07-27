@@ -1,0 +1,13 @@
+syntax="proto3";
+
+package person;
+
+option java_package = "com.mcolomer.model";
+option java_outer_classname = "AddressBuilder";
+
+message Address {
+      string street = 1;
+      string number = 2;
+      string city = 3;
+      string country = 4;
+}

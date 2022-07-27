@@ -1,0 +1,19 @@
+syntax="proto3";
+
+package person;
+
+import "model/address.proto";
+
+option java_package = "com.mcolomer.model";
+option java_outer_classname = "PersonBuilder";
+
+message Person {
+      string name = 1;
+      string email = 2;
+      string phone = 3;
+      string company = 4;
+      string job = 5;
+      string gender = 6;
+      int32 age = 7;
+      Address address = 8;
+}
