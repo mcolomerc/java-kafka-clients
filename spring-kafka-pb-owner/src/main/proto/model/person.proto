@@ -2,7 +2,7 @@ syntax="proto3";
 
 package person;
 
-import "model/address.proto";
+import "model/address-value.proto";
 
 option java_package = "com.mcolomer.model";
 option java_outer_classname = "PersonBuilder";

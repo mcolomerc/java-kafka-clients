@@ -1,6 +1,6 @@
 syntax="proto3";
 
-package person;
+package model;
 
 option java_package = "com.mcolomer.model";
 option java_outer_classname = "AddressBuilder";
