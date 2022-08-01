@@ -3,6 +3,7 @@ package com.mcolomer.kafka.consumer;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.DynamicMessage;
 
+import com.mcolomer.model.PersonBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,11 +17,8 @@ public class KafkaClientConsumer {
     private final Logger logger = LoggerFactory.getLogger(KafkaClientConsumer.class);
 
     @KafkaListener(topics = "${persons.topic}", groupId = "${spring.kafka.consumer.group-id}")
-    public void listenGroupFoo(DynamicMessage message) {
-        logger.info("Received Message: {} ",  message);
-        Map<Descriptors.FieldDescriptor, Object> fieldDescs = message.getAllFields();
-        for (Map.Entry<Descriptors.FieldDescriptor, Object> entry : fieldDescs.entrySet()) {
-            logger.info("{}:{}", entry.getKey().getName(), entry.getValue());
-        }
+    public void listenPersons(PersonBuilder.Person person) {
+        logger.info("Received Person: {} ",  person);
+        logger.info("Received Person - Address - City: {} ",  person.getAddress().getCity());
     }
 }

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.2</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.mcolomer</groupId>
+    <artifactId>kafka-pb-owner</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Schema Owner</name>
+    <description>Kafka Protobuf Schema owner</description>
+    <properties>
+        <java.version>11</java.version>
+        <schemaRegistryUrl>http://localhost:8081</schemaRegistryUrl>
+    </properties>
+    <repositories>
+        <repository>
+            <id>confluent</id>
+            <url>https://packages.confluent.io/maven/</url>
+        </repository>
+    </repositories>
+    <dependencies> 
+    </dependencies>
+    <build>
+        <plugins> 
+            <plugin>
+                <groupId>io.confluent</groupId>
+                <artifactId>kafka-schema-registry-maven-plugin</artifactId>
+                <version>7.2.1</version>
+                <configuration>
+                    <schemaRegistryUrls>
+                        <param>${schemaRegistryUrl}</param>
+                    </schemaRegistryUrls>
+                   <!-- <userInfoConfig>${schemaRegistryBasicAuthUserInfo}</userInfoConfig> -->
+                    <schemas>
+                        <address>src/main/proto/model/address.proto</address>
+                        <person>src/main/proto/model/person.proto</person>
+                    </schemas>
+                    <subjects>
+                        <address>src/main/proto/model/address.proto</address>
+                        <person>src/main/proto/model/person.proto</person>
+                    </subjects>
+                    <references>
+                        <person>
+                            <reference>
+                                <name>model/address.proto</name>
+                                <subject>address</subject>
+                            </reference>
+                        </person>
+                    </references>
+                    <schemaTypes>
+                        <address>PROTOBUF</address>
+                        <person>PROTOBUF</person>
+                    </schemaTypes>
+                    <compatibilityLevels/>
+                    <outputDirectory/>
+                    <previousSchemaPaths/>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <executable>mvn</executable>
+                    <arguments>
+                        <argument>clean</argument> 
+                        <argument>schema-registry:register</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+         </plugins>
+    </build>
+</project>

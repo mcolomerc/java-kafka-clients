@@ -11,30 +11,54 @@
 docker-compose up -d
 ```
 
-## Spring Boot Kafka Clients 
+
+## Schema Owner 
+
+./spring-kafka-pb-owner
+
+Register schemas with the Schema Registry server using the Maven Plugin 
+
+```xml
+<groupId>io.confluent</groupId>
+<artifactId>kafka-schema-registry-maven-plugin</artifactId>
+```
+
+![owner](docs/schema-catalog.png)
+
+
+```sh
+mvn schema-registry:register
+``` 
+
+[More](spring-kafka-pb-owner/Readme.md)
+
+
+## Spring Boot Kafka Clients  
 
 ### Spring Boot Kafka Protobuf Producer
 
-./spring-kafka-pb-producer
+Folder: ```./spring-kafka-pb-producer```
 
 * Generate source from .proto definition
 
-* Generate protobuf messages: io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializer 
-
-* Schema registry integration
+* Generate protobuf messages: io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializer   
 
 * Person data generator
+
+* Produce Persons
+
+[More](spring-kafka-pb-producer/Readme.md)
 
  
 ### Spring Boot Kafka Protobuf Consumer
 
-./spring-kafka-pb-consumer 
+Folder: ```./spring-kafka-pb-consumer``` 
 
 * io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializer
 
-* Schema registry integration
+* Consume Persons from Kafka  
 
-* Consume Generic type: com.google.protobuf.DynamicMessage
+[More](spring-kafka-pb-consumer/Readme.md)
 
 
 

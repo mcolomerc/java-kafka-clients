@@ -15,6 +15,7 @@
 	<description>Spring Boot Kafka Protobuf Consumer</description>
 	<properties>
 		<java.version>11</java.version>
+		<schemaRegistryUrl>http://localhost:8081</schemaRegistryUrl>
 	</properties>
 	<repositories>
 		<repository>
@@ -62,29 +63,67 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
-		<plugin>
-			<groupId>com.github.os72</groupId>
-			<artifactId>protoc-jar-maven-plugin</artifactId>
-			<version>3.11.4</version>
-			<executions>
-				<execution>
-					<phase>generate-sources</phase>
-					<goals>
-						<goal>run</goal>
-					</goals>
-					<configuration>
-						<protocVersion>3.6.0</protocVersion>
-						<includeMavenTypes>direct</includeMavenTypes>
-						<includeDirectories>
-							<include>src/main/protobuf</include>
-						</includeDirectories>
-						<inputDirectories>
-							<include>src/main/protobuf</include>
-						</inputDirectories>
-					</configuration>
-				</execution>
-			</executions>
-		</plugin>
+			<plugin>
+				<groupId>com.github.os72</groupId>
+				<artifactId>protoc-jar-maven-plugin</artifactId>
+				<version>3.11.4</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<protocVersion>3.6.0</protocVersion>
+							<includeMavenTypes>direct</includeMavenTypes>
+							<includeDirectories>
+								<include>target/protobuf/</include>
+							</includeDirectories>
+							<inputDirectories>
+								<include>target/protobuf/</include>
+							</inputDirectories>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>io.confluent</groupId>
+				<artifactId>kafka-schema-registry-maven-plugin</artifactId>
+				<version>7.2.1</version>
+				<configuration>
+					<schemaRegistryUrls>
+						<param>${schemaRegistryUrl}</param>
+					</schemaRegistryUrls>
+					<!-- <userInfoConfig>${schemaRegistryBasicAuthUserInfo}</userInfoConfig> -->
+					<outputDirectory>target/protobuf/model/</outputDirectory>
+					<subjectPatterns>
+						<param>^sb-person-(key|value)$</param>
+						<param>address</param>
+					</subjectPatterns>
+					<versions> <!-- versions size should be same as subjectPatterns size -->
+						<param>latest</param>
+						<param>latest</param>
+					</versions>
+					<schemaExtension>.proto</schemaExtension>
+					<subjects/>
+					<compatibilityLevels/>
+					<previousSchemaPaths/>
+					<schemas/>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<executable>mvn</executable>
+					<arguments>
+						<argument>clean</argument>
+						<argument>schema-registry:download</argument>
+						<argument>generate-sources</argument>
+					</arguments>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

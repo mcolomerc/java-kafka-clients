@@ -1,8 +1,12 @@
 package com.mcolomer.kafka.config;
 
+import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Value;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Locale;
 
 @Configuration
 public class PersonProducerConfig {
@@ -10,14 +14,13 @@ public class PersonProducerConfig {
     @Value(value = "${persons.topic}")
     private String topic;
 
-    @Value (value = "${persons.fake.number}")
-    private int numPersons;
-
     public String getTopic () {
         return this.topic;
     }
 
-    public int getFakeNumber () {
-        return this.numPersons;
+    @Bean
+    public Faker getFaker() {
+        return new Faker(new Locale("en-EN"));
     }
+
 }

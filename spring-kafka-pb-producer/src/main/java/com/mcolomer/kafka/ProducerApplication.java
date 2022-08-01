@@ -5,10 +5,12 @@ import com.mcolomer.kafka.config.PersonProducerConfig;
 import com.mcolomer.kafka.producer.PersonProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 
 import java.util.Locale;
 
@@ -21,23 +23,16 @@ public class ProducerApplication {
 		SpringApplication.run(ProducerApplication.class, args);
 	}
 
-	@Bean
-	public Faker getFaker() {
-		return new Faker(new Locale("en-EN"));
-	}
+
 
 	@Bean
-	public CommandLineRunner CommandLineRunnerBean(PersonProducer personProducer, PersonProducerConfig config) {
-		return (args) -> {
-			logger.info("In CommandLineRunnerImpl ");
-
-			for (String arg : args) {
-				logger.debug(arg);
+	@Profile("! test")
+	public ApplicationRunner runner(PersonProducer personProducer, PersonProducerConfig config) {
+		return args -> {
+			logger.info("Producing messages. . . ");
+			for (;;) {
+				personProducer.sendPerson(config.getTopic());
 			}
-
-			// kafkaClientProducer.sendMessage("--> Message from Spring boot");
-			personProducer.sendPersons(config.getTopic(), config.getFakeNumber());
-
 		};
 	}
 

@@ -1,8 +1,10 @@
 package com.mcolomer.kafka.config;
 
 import com.google.protobuf.DynamicMessage;
+import com.mcolomer.model.PersonBuilder;
 import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializer;
 
+import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializerConfig;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,19 +41,19 @@ public class KafkaConsumerConfig {
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaProtobufDeserializer.class);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, autoOffsetReset);
-        props.put("schema.registry.url", schemaRegistry);
-
+        props.put(KafkaProtobufDeserializerConfig.SCHEMA_REGISTRY_URL_CONFIG, schemaRegistry);
+        props.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, PersonBuilder.Person.class.getName());
         return props;
     }
 
     @Bean
-    public ConsumerFactory<String, DynamicMessage> consumerFactory() {
+    public ConsumerFactory<String, PersonBuilder.Person> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(consumerProps());
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, DynamicMessage> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, DynamicMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, PersonBuilder.Person> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, PersonBuilder.Person> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }

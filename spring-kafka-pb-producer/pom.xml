@@ -15,6 +15,8 @@
 	<description>Spring Boot Kafka Protobuf producer</description>
 	<properties>
 		<java.version>11</java.version>
+		<schemaRegistryUrl>http://localhost:8081</schemaRegistryUrl>
+		<testcontainer.version>1.17.3</testcontainer.version>
 	</properties>
 	<repositories>
 		<repository>
@@ -22,6 +24,7 @@
 			<url>https://packages.confluent.io/maven/</url>
 		</repository>
 	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -30,17 +33,6 @@
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.kafka</groupId>
-			<artifactId>spring-kafka-test</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
@@ -57,8 +49,44 @@
 			<artifactId>kafka-protobuf-serializer</artifactId>
 			<version>7.2.1</version>
 		</dependency>
-	</dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.awaitility</groupId>
+			<artifactId>awaitility</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>kafka</artifactId>
+			<scope>test</scope>
+		</dependency>
 
+	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>testcontainers-bom</artifactId>
+				<version>${testcontainer.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<build>
 		<plugins>
 			<plugin>
@@ -80,15 +108,53 @@
 						<protocVersion>3.6.0</protocVersion>
 						<includeMavenTypes>direct</includeMavenTypes>
 						<includeDirectories>
-							<include>src/main/protobuf</include>
+							<include>target/protobuf/</include>
 						</includeDirectories>
 						<inputDirectories>
-							<include>src/main/protobuf</include>
+							<include>target/protobuf/</include>
 						</inputDirectories>
 					</configuration>
 				</execution>
 			</executions>
 		</plugin>
+			<plugin>
+				<groupId>io.confluent</groupId>
+				<artifactId>kafka-schema-registry-maven-plugin</artifactId>
+				<version>7.2.1</version>
+				<configuration>
+					<schemaRegistryUrls>
+						<param>${schemaRegistryUrl}</param>
+					</schemaRegistryUrls>
+					<!-- <userInfoConfig>${schemaRegistryBasicAuthUserInfo}</userInfoConfig> -->
+					<outputDirectory>target/protobuf/model/</outputDirectory>
+					<subjectPatterns>
+						<param>person</param>
+						<param>address</param>
+					</subjectPatterns>
+					<versions> <!-- versions size should be same as subjectPatterns size -->
+						<param>latest</param>
+						<param>latest</param>
+					</versions>
+					<schemaExtension>.proto</schemaExtension>
+					<subjects/>
+					<compatibilityLevels/>
+					<previousSchemaPaths/>
+					<schemas/>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<executable>mvn</executable>
+					<arguments>
+						<argument>clean</argument>
+						<argument>schema-registry:download</argument>
+						<argument>generate-sources</argument>
+					</arguments>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
