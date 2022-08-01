@@ -135,35 +135,6 @@ Some of the syntactic differences that are handled by normalization include the 
 
 [More...](https://docs.confluent.io/platform/current/schema-registry/serdes-develop/index.html#schema-normalization)
 
-
-## Which tools should I use?
-
-### Confluent CLI 
-
-Manage Schema Registry via the Confluent CLI.
-
-[Confluent CLI](https://docs.confluent.io/confluent-cli/current/command-reference/schema-registry/index.html#confluent-schema-registry)
-
-### Schema Registry API 
-
-Build a client for the Schema Registry REST API.
-
-[Schema Registry API](https://docs.confluent.io/platform/current/schema-registry/develop/api.html)
-
-### Maven Plugin
-
-A Maven plugin for Confluent Schema Registry is available to help throughout the development process, including:
-
-* Validate
-
-* Validate-Local
-
-* Register
-
-* Download
-
-[More](https://docs.confluent.io/platform/current/schema-registry/develop/maven-plugin.html#sr-maven-plugin)
-
 ## Who is the Schema Owner?  
 
 ### Producer 
@@ -212,6 +183,35 @@ In some scenarios the Consumer could be the schema owner, such as when the schem
 * Poorly managing a Kafka cluster that causes broker problems
 
 [More](https://www.confluent.io/blog/17-ways-to-mess-up-self-managed-schema-registry/)
+
+
+## Which tools can I use?
+
+### Confluent CLI 
+
+Manage Schema Registry via the Confluent CLI.
+
+[Confluent CLI](https://docs.confluent.io/confluent-cli/current/command-reference/schema-registry/index.html#confluent-schema-registry)
+
+### Schema Registry API 
+
+Build a client for the Schema Registry REST API.
+
+[Schema Registry API](https://docs.confluent.io/platform/current/schema-registry/develop/api.html)
+
+### Maven Plugin
+
+A Maven plugin for Confluent Schema Registry is available to help throughout the development process, including:
+
+* Validate
+
+* Validate-Local
+
+* Register
+
+* Download
+
+[More](https://docs.confluent.io/platform/current/schema-registry/develop/maven-plugin.html#sr-maven-plugin)
 
  
 ## Confluent Cloud Schema Registry
