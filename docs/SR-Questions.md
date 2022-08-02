@@ -1,5 +1,25 @@
 # Schema Regsitry Notes
 
+**Table of contents** 
+
+[Why Schema Registry](https://github.com/mcolomerc/java-kafka-clients/blob/main/docs/SR-Questions.md#why-schema-registry)
+
+[Which Schema format to choose?](https://github.com/mcolomerc/java-kafka-clients/blob/main/docs/SR-Questions.md#which-schema-format-to-choose)
+
+[Why Schema evolution?](https://github.com/mcolomerc/java-kafka-clients/blob/main/docs/SR-Questions.md#why-schema-evolution)
+
+[Which Subject Naming Strategy to choose?](https://github.com/mcolomerc/java-kafka-clients/blob/main/docs/SR-Questions.md#which-subject-naming-strategy-to-choose)
+
+[Should I need to Normalize Schemas?](https://github.com/mcolomerc/java-kafka-clients/blob/main/docs/SR-Questions.md#should-i-need-to-normalize-schemas)
+
+[Who is the Schema Owner?](https://github.com/mcolomerc/java-kafka-clients/blob/main/docs/SR-Questions.md#who-is-the-schema-owner)
+
+[Which tools can I use?](https://github.com/mcolomerc/java-kafka-clients/blob/main/docs/SR-Questions.md#which-tools-can-i-use)
+
+[Confluent Cloud Schema Registry](https://github.com/mcolomerc/java-kafka-clients/blob/main/docs/SR-Questions.md#confluent-cloud-schema-registry)
+
+[Self Managed Bad Practices](https://github.com/mcolomerc/java-kafka-clients/blob/main/docs/SR-Questions.md#self-managed---bad-practices)
+
 ## Why Schema Registry?
 
 > A key requirement of our centralised event streaming platform is resilience and one step towards achieving this is providing guarantees about the structure of messages and data types within those messages. These guarantees mean consumer applications can have expectations of the format of the data and be less vulnerable to breaking due to corrupt messages.
@@ -91,7 +111,10 @@ JSON Schema does not explicitly define compatibility rules. [More](https://yokot
 [More...](https://docs.confluent.io/platform/current/schema-registry/avro.html#schema-evolution-and-compatibility)
 and [More...](https://www.confluent.io/blog/schemas-contracts-compatibility/)
 
-TRANSITIVE!! -----> TODO!
+```_TRANSITIVE``` suffix.
+
+**transitive**: ensures compatibility between X-2 <==> X-1 and X-1 <==> X and X-2 <==> X
+**non-transitive**: ensures compatibility between X-2 <==> X-1 and X-1 <==> X, but not necessarily X-2 <==> X
 
 ## Which Subject Naming Strategy to choose?
 
@@ -160,8 +183,37 @@ The benefit of using a centralized repository of data models is to ensure good d
 
 In some scenarios the Consumer could be the schema owner, such as when the schema is provided by a third-party. In that cases the consumer can register the schema with the Schema Registry, and the producers must use the same schema, disabling the auto schema registration. 
 
-![consumer](consumer-owner.png "Consumer")
- 
+![consumer](consumer-owner.png "Consumer") 
+
+## Which tools can I use?
+
+### Confluent CLI 
+
+Manage Schema Registry via the Confluent CLI.
+
+[Confluent CLI](https://docs.confluent.io/confluent-cli/current/command-reference/schema-registry/index.html#confluent-schema-registry)
+
+### Schema Registry API 
+
+Build a client for the Schema Registry REST API.
+
+[Schema Registry API](https://docs.confluent.io/platform/current/schema-registry/develop/api.html)
+
+### Maven Plugin
+
+A Maven plugin for Confluent Schema Registry is available to help throughout the development process, including:
+
+* Validate
+
+* Validate-Local
+
+* Register
+
+* Download
+
+[More](https://docs.confluent.io/platform/current/schema-registry/develop/maven-plugin.html#sr-maven-plugin)
+
+
 ## Self Managed - Bad Practices
 
 * Co-locating Schema Registry instances on Apache Kafka® brokers
@@ -184,36 +236,6 @@ In some scenarios the Consumer could be the schema owner, such as when the schem
 
 [More](https://www.confluent.io/blog/17-ways-to-mess-up-self-managed-schema-registry/)
 
-
-## Which tools can I use?
-
-### Confluent CLI 
-
-Manage Schema Registry via the Confluent CLI.
-
-[Confluent CLI](https://docs.confluent.io/confluent-cli/current/command-reference/schema-registry/index.html#confluent-schema-registry)
-
-### Schema Registry API 
-
-Build a client for the Schema Registry REST API.
-
-[Schema Registry API](https://docs.confluent.io/platform/current/schema-registry/develop/api.html)
-
-### Maven Plugin
-
-A Maven plugin for Confluent Schema Registry is available to help throughout the development process, including:
-
-* Validate
-
-* Validate-Local
-
-* Register
-
-* Download
-
-[More](https://docs.confluent.io/platform/current/schema-registry/develop/maven-plugin.html#sr-maven-plugin)
-
- 
 ## Confluent Cloud Schema Registry
 
 * Your VPC must be able to communicate with the Confluent Cloud Schema Registry public internet endpoint. 
