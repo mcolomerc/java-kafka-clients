@@ -1,4 +1,4 @@
-# Schema Regsitry Notes
+# Schema Registry Notes
 
 **Table of contents** 
 
